@@ -16,6 +16,10 @@ titles:
   ko      : &KO       소개
   ko-KR   : *KO
 key: page-about
+aside:
+  toc: true
+sidebar:
+  nav: layouts
 ---
 
 ![TeXt Theme](https://raw.githubusercontent.com/kitian616/jekyll-TeXt-theme/master/screenshots/TeXt-home.jpg)
