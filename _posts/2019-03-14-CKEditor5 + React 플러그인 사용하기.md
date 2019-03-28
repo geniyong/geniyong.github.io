@@ -1,3 +1,7 @@
+---
+tags: React
+title: React + CKEditor5 플러그인 사용하기
+---
 # CKEditor 5 빌드에 대한 이해     
 
 CKEditor 5 빌드는 설치하자 마자 사용할 수 있는 상태 즉, ready to use 형태로 빌드 되어 있음
