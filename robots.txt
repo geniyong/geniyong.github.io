@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: http://geniyong.github.io/sitemap.xml
