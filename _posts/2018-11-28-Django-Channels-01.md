@@ -1,7 +1,8 @@
 ---
-layout: post
+tags: Django
 title: Django Channels - 01. 기본설정
 ---
+
 ###### python3.x 및 django 2.x 의 설치가 되어있다고 간주.
 ### 1. mysite 프로젝트 생성 및 chat 어플리케이션 생성
 ```

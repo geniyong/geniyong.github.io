@@ -1,5 +1,5 @@
 ---
-layout: post
+tags: Django
 title: Django Channels - 설치하기 (installation)
 ---
 

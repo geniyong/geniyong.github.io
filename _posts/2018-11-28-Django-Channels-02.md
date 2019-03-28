@@ -1,5 +1,5 @@
 ---
-layout: post
+tags: Django
 title: Django Channels - 02. 채팅 서버 설정 (Implement Chat Server)
 ---
 ## 목표 : 양자간 커뮤니케이션 가능한 채팅방 개설

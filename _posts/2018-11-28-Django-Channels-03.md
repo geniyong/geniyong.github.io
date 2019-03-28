@@ -1,5 +1,5 @@
 ---
-layout: post
+tags: Django
 title: Django Channles - 03. 채널 레이어 활성화 (Enable a Channel Layer)
 ---
 ## 채널레이어
