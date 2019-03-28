@@ -249,7 +249,6 @@ export default App;
 ``` javascript
 import React from 'react';
 import './index.css'
-
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import InlineEditor from '@ckeditor/ckeditor5-build-inline';
@@ -272,8 +271,6 @@ import Link from '@ckeditor/ckeditor5-link/src/link';
 import List from '@ckeditor/ckeditor5-list/src/list';
 import Alignment from '@ckeditor/ckeditor5-alignment/src/alignment'; 
 import CKFinder from '@ckeditor/ckeditor5-ckfinder/src/ckfinder';
-
-// Components
 
 export default class MyEditor extends React.Component {
   constructor(props) {
@@ -299,7 +296,8 @@ export default class MyEditor extends React.Component {
             onFocus={ editor => {
                 console.log( 'Focus.', editor );
             } }
-            config = {{
+            config = {
+            	{
               plugins: [ CKFinder, Highlight, Essentials, Paragraph, Bold, Italic, Heading, UploadAdapter, Autoformat, BlockQuote, 
               EasyImage, Image, ImageCaption, ImageStyle, ImageToolbar, ImageUpload, Link, List, Alignment ],
 
@@ -379,7 +377,8 @@ export default class MyEditor extends React.Component {
               ckfinder: {
                 uploadUrl: 'http://api.dev.mustrip.io/meetup/upload/files/'
               },
-            }}
+            }
+          }
         />
       </div>
     );
