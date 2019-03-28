@@ -16,7 +16,7 @@ highlight plugin 설치 및 import 를 진행했지만, Webpack 에서 svg 를 �
 
 `ERROR TypeError` : Cannot read property 'getAttribute' of null
 
-![error.png](https://postfiles.pstatic.net/MjAxOTAzMTJfMjk0/MDAxNTUyMzg0MjA4NDQy.SxxK51iD_vwDU7NFk40yYV1KDZ1axsuGuMEch_tbkxIg.GgUnlKgXrauKAC0y9TKZMZdw8RSWtGAgT_IjgBSZZY4g.PNG.inforsec0201/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7_2019-03-12_%EC%98%A4%ED%9B%84_6.49.39.png?type=w966)
+![error.png](https://user-images.githubusercontent.com/35215439/55157274-5dfca880-519f-11e9-9d89-aedbb0a65076.png)
 
 그래서 다시 documentation 을 천천히 읽어 본 결과,
 
