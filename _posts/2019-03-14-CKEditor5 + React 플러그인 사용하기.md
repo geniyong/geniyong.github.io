@@ -246,7 +246,7 @@ export default App;
 ​
 내가 사용하는 플러그인들.. 모두 포함한 소스코드
 
-``` js
+``` javascript
 import React from 'react';
 import './index.css'
 
@@ -380,10 +380,9 @@ export default class MyEditor extends React.Component {
                 uploadUrl: 'http://api.dev.mustrip.io/meetup/upload/files/'
               },
             }}
-        />      
+        />
       </div>
     );
   }
 }
-
 ```
