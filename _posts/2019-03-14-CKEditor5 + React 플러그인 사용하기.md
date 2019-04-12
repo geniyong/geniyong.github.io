@@ -76,14 +76,14 @@ npm run eject 명령어를 통해 webpack 설정을 추출하고 나면
 
 다음 경로에 설정파일이 추출 됨
 
-```
+``` javascript
 <project_root>/config/webpack.config.dev.js
 <project_root>/config/webpack.config.prod.js
 ```
 
 또는
 
-```
+``` javascript
 <project_root>/config/webpackDevServer.config.js  // dev
 <project_root>/config/webpack.config.js  // prod
 ```

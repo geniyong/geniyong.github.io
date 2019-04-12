@@ -18,7 +18,7 @@ Django REST 프레임워크를 사용하면 `ViewSet`이라고하는 단일 클�
 ## Example
 시스템의 모든 사용자를 나열하거나 검색하는데 사용 할 수 있는 간단한 viewset을 정의합니다.     
 
-``` Python
+``` python
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from myapps.serializers import UserSerializer
@@ -42,13 +42,13 @@ class UserViewSet(viewsets.ViewSet):
 ```
 필요한 경우 이 viewset을 다음과 같이 두 개의 개별 뷰 바인딩 할 수 있습니다.       
 
-``` Python
+``` python
 user_list = UserViewSet.as_view({'get': 'list'})
 user_detail = UserViewSet.as_view({'get': 'retrieve'})
 ```
 일반적으로는 이것을 하지 않고 대신에 viewset을 라우터에 등록하고 urlconf가 자동으로 생성되도록 할 것입니다.       
 
-``` Python
+``` python
 from myapp.views import UserViewSet
 from rest_framework.routers import DefaultRouter
 
@@ -58,7 +58,7 @@ urlpatterns = router.urls
 ```
 자신만의 viewset를 작성하는 대신, 기본 동작 set을 제공하는 기존 기본 클래스를 사용하는 것이 좋습니다. 예를 들어:    
 
-``` Python
+``` python
 class UserViewSet(viewsets.ModelViewSet):
     """
     A viewset for viewing and editing user instances.
@@ -75,7 +75,7 @@ class UserViewSet(viewsets.ModelViewSet):
 ## ViewSet actions
 REST 프레임워크에 포함 된 기본 `router`는 아래와 같이 `creste`/`retirieve`/`update`/`destroy` 스타일 작업의 기본 set을 위한 경로를 제공합니다.   
 
-``` Python
+``` python
 class UserViewSet(viewsets.ViewSet):
     """
     Example empty viewset demonstrating the standard
@@ -107,7 +107,7 @@ class UserViewSet(viewsets.ViewSet):
 `@detail_router` 데코레이터는 URL 패턴에 `pk`를 포함하며 단일 인스턴스가 필요한 메소드용입니다. `@list_router` 데코레이터는 객체 목록에서 작동하는 메소드를 대상으로 합니다.     
 
 예를 들어:
-``` Python
+``` python
 from django.contrib.auth.models import User
 from rest_framework import status
 from rest_framework import viewsets
@@ -151,7 +151,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
 예를 들어:    
 
-``` Python
+``` python
     @detail_route(methods=['post'], permission_classes=[IsAdminOrIsSelf])
     def set_password(self, request, pk=None):
        ...
@@ -161,7 +161,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
 예를 들어:   
 
-``` Python
+``` python
     @detail_route(methods=['post', 'delete'])
     def unset_password(self, request, pk=None):
        ...
@@ -188,7 +188,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
 예를 들어:   
 
-``` Python
+``` python
 class AccountViewSet(viewsets.ModelViewSet):
     """
     A simple ViewSet for viewing and editing accounts.
@@ -199,7 +199,7 @@ class AccountViewSet(viewsets.ModelViewSet):
 ```
 `GenericAPIView`가 제공하는 표준 속성이나 메소드 오버라이드를 사용할 수 있습니다. 예를 들어, 작동해야하는 `queryset`을 동적으로 결정하는 viewset을 사용하려면 다음과 같이 할 수 있습니다.
 
-``` Python
+``` python
 class AccountViewSet(viewsets.ModelViewSet):
     """
     A simple ViewSet for viewing and editing the accounts
@@ -225,7 +225,7 @@ class AccountViewSet(viewsets.ModelViewSet):
 
 예를 들어:     
 
-``` Python
+``` python
 class AccountViewSet(viewsets.ReadOnlyModelViewSet):
     """
     A simple ViewSet for viewing accounts.
@@ -242,7 +242,7 @@ class AccountViewSet(viewsets.ReadOnlyModelViewSet):
 ### Example
 `create`, `list`, `retrieve` 조작을 제공하고, `GenericViewSet`에서 상속하며, 필요한 조치를 `mixin`하는 기본 viewset를 작성하려면 다음을 작성하세요.
 
-``` Python
+``` python
 class CreateListRetrieveViewSet(mixins.CreateModelMixin,
                                 mixins.ListModelMixin,
                                 mixins.RetrieveModelMixin,
