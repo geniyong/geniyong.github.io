@@ -1,5 +1,7 @@
-# Django Rest Framework - ViewSets
-- - -
+---
+tags: Django
+title: Django Rest Framework - ViewSets
+---
 # ViewSets
 > After routing has determined which controller to use for a request,
 > your controller is responsible for making sense of the request and

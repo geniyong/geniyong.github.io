@@ -1,4 +1,7 @@
-# Django values() vs values_list()
+---
+tags: Django
+title: Django values() vs values_list()
+---
 ## Django 에서 values() 와 values_list() 의 차이점
 
 ``` python
