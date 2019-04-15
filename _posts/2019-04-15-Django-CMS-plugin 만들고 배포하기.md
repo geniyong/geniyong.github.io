@@ -134,5 +134,75 @@ or
 
 다른 많은 메서드들도 당신의 CMSPluginBase 하위클래스를 (플러그인 클래스) 오버라이딩 하기 위해 사용할 수 있다. 참조: [CMSPluginBase - 자세히 보기](http://docs.django-cms.org/en/latest/reference/plugins.html#cms.plugin_base.CMSPluginBase)
 
+## 문제 해결
+플러그인 모듈은 django 의 importlib 에 의해 발견되고 로딩되기 때문에 런타임에 경로 환경이 다르면 오류가 발생할 수 있다. 만약 cms_plugins 가 로드되지 않았거나 접근가능하지 않다면 다음을 진행하라:
+``` bash
+$ python manage.py shell
+>>> from importlib import import_module
+>>> m = import_module("myapp.cms_plugins")
+>>> m.some_test_function()
+```
+
+## 환경설정 저장
+많은 경우 플러그인 인스턴스들의 환경 요소 저장을 하고 싶어한다. 예를 들어, 만약 가장 최신의 블로그 게시물을 보여주는 플러그인이 있다고 했을 때, 표시된 항목의 수량을 선택하고 싶을 지도 모른다. 또 다르게는, 보고싶은 사진들만 선택할 수 있는 갤러리 플러그인 예시를 들 수 있다.
+
+이렇게 하기 위해서는 설치된 앱의 `models.py` 안에 `cms.models.pluginmodel.CMSPlugin` 의 하위클래스의 모델을 만들어야 한다.
+
+앞서 만든 `HelloPlugin` 을 개선해보자. 인증되지 않은 사용자를 위해 대비한 이름을 구성할 수 있도록 설정해보자.
+
+`models.py` 에 다음을 추가한다:
+
+```python
+from cms.models.pluginmodel import CMSPlugin
+
+from django.db import models
+
+class Hello(CMSPlugin):
+    guest_name = models.CharField(max_length=50, default='Guest')
+```
+
+일반적으로 django 를 다뤄본 개발자라면 이는 익숙할 것이다. 다만 일반적인 django model 과 다른점이라 하면 `django.db.models.Model` 이 아니라 `cms.models.pluginmodel.CMSPlugin` 의 하위모델로 model 을 정의한 점이다.
+
+이제 이 모델을 사용하도록 앞서 만든 플러그인의 정의를 바꿔야 한다. 따라서 앞서 만든 `cms_plugins.py` 의 내용은 다음과 같다:
+```python
+from cms.plugin_base import CMSPluginBase
+from cms.plugin_pool import plugin_pool
+from django.utils.translation import ugettext_lazy as _
+
+from .models import Hello
+
+@plugin_pool.register_plugin
+class HelloPlugin(CMSPluginBase):
+    model = Hello
+    name = _("Hello Plugin")
+    render_template = "hello_plugin.html"
+    cache = False
+
+    def render(self, context, instance, placeholder):
+        context = super(HelloPlugin, self).render(context, instance, placeholder)
+        return context
+```
+
+앞서 만든 내용과 다른점은 `model` 속성의 값을 우리가 새로 만든 `Hello` 모델로 정의하고 이 모델의 인스턴스를 context 로 전달하고 있다는 점이다.
+
+마지막으로, 앞서 만든 template 도 방금 변경한 플러그인을 사용할 수 있도록 변경해줘야 한다.
+`hello_plugin.html` 의 내용은 다음과 같다:
+
+```html
+{% raw %}
+<h1>Hello {% if request.user.is_authenticated %}
+  {{ request.user.first_name }} {{ request.user.last_name}}
+{% else %}
+  {{ instance.guest_name }}
+{% endif %}</h1>
+{% endraw %}
+```
+
+template 의 내용 중 바뀐 점은 하드 코딩된 `Guest` 부분을 `{{ instance.guest_name }}` 이라는 템플릿 변수로 바꾼 것 밖에 없다.
+
+### 관계형 다루기
+
+
+
 
 
