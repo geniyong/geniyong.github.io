@@ -110,8 +110,10 @@ class HelloPlugin(CMSPluginBase):
 
 이제 template 만 추가해주면 끝난다. 루트 템플릿 디렉토리에 아래의 코드가 작성된 `hello_plugin.html` 파일 하나만 추가해주면 된다.
 
-``` raw
+``` html
+{% raw %}
 <h1>Hello {% if request.user.is_authenticated %}{{ request.user.first_name }} {{ request.user.last_name}}{% else %}Guest{% endif %}</h1>
+{% endraw %}
 ```
 
 
