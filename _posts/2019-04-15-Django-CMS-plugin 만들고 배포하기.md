@@ -110,8 +110,9 @@ class HelloPlugin(CMSPluginBase):
 
 이제 template 만 추가해주면 끝난다. 루트 템플릿 디렉토리에 아래의 코드가 작성된 `hello_plugin.html` 파일 하나만 추가해주면 된다.
 
-
-`<h1>Hello {% if request.user.is_authenticated %}{{ request.user.first_name }} {{ request.user.last_name}}{% else %}Guest{% endif %}</h1>`
+``` raw
+<h1>Hello {% if request.user.is_authenticated %}{{ request.user.first_name }} {{ request.user.last_name}}{% else %}Guest{% endif %}</h1>
+```
 
 
 이 플러그인은 로그인한 유저 또는 로그인 하지 않았을 경우 게스트를 환영하는 아주 간단한 hello_world 플러그인이다.
