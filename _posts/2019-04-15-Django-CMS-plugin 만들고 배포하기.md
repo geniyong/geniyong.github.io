@@ -116,8 +116,23 @@ class HelloPlugin(CMSPluginBase):
 {% endraw %}
 ```
 
-
 이 플러그인은 로그인한 유저 또는 로그인 하지 않았을 경우 게스트를 환영하는 아주 간단한 hello_world 플러그인이다.
+
+이제 위의 코드들에 대해 자세히 들여다보자
+`cms.plugins.py` 파일은 `cms.plugin_base.CMSPluginBase` 의 하위클래스를 정의해야하는 곳이다. 그리고 이 클래스들은 서로 다른 플러그인들을 정의한다.
+
+아래는 플러그인 클래스에서 필요한 두 가지 속성들이다:
+* `model` : 이 플러그인에 대한 정보를 저장하는데 사용할 모델이다. 만약 모델에 저장될 어떠한 특별한 정보를 요구하지 않는다면 (이를테면, 환경 설정=`configuration` 과 같은 정보) `cms.models.pluginmodel.CMSPlugin` 을 간단히 사용할 수 있다. (이 모델을 조금 더 자세히 알아볼것이다) 일반적인 관리자 클래스에서 이 정보를 제공할 필요가 없다. 왜냐하면 `admin.site.register(Model, Admin)` 에서 관리하지만, 플러그인은 그런 방식으로 등록되지 않기 때문이다.
+* `name` : `admin` 에서 보여질 플러그인의 이름이다. 일반적으로 이는 `django.utils.translation.ugettext_lazy()` 를 사용하여 번역가능한 언어로 쓰는 것이 좋지만 이는 선택사항이다. 기본적으로 이 이름은 클래스 이름의 더 좋은 버전이다.
+
+그리고 아래는 만약 `render_plugin` 속성이 `True` 일 때, 정의 해야만 하는 것들이다:
+* `render_template` : 이 플러그인을 렌더링할 템플릿
+or
+* `get_render_template` : 플러그인을 렌더링할 템플릿 경로를 리턴하는 메서드.
+
+이러한 속성들과 더불어 `render()` 메서드 역시 override 할 수 있다. 이 메서드를 오버라이드 해서 플러그인을 렌더링하기 위해 사용되는 template context 변수들을 정해줄 수 있다. 기본적으로 이 메서드는 context 에 `instance` 와 `placeholder` 객체만 추가해주면 되지만, 플러그인이 필요한 context 를 포함하도록 오버라이드 할 수 있다.
+
+다른 많은 메서드들도 당신의 CMSPluginBase 하위클래스를 (플러그인 클래스) 오버라이딩 하기 위해 사용할 수 있다. 참조: `[CMSPluginBase - 자세히 보기](http://docs.django-cms.org/en/latest/reference/plugins.html#cms.plugin_base.CMSPluginBase)`
 
 
 
