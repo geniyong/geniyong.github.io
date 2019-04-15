@@ -143,7 +143,7 @@ $ python manage.py shell
 >>> m.some_test_function()
 ```
 
-## 환경설정 저장
+## 환경설정 저장 (플러그인 모델 만들기)
 많은 경우 플러그인 인스턴스들의 환경 요소 저장을 하고 싶어한다. 예를 들어, 만약 가장 최신의 블로그 게시물을 보여주는 플러그인이 있다고 했을 때, 표시된 항목의 수량을 선택하고 싶을 지도 모른다. 또 다르게는, 보고싶은 사진들만 선택할 수 있는 갤러리 플러그인 예시를 들 수 있다.
 
 이렇게 하기 위해서는 설치된 앱의 `models.py` 안에 `cms.models.pluginmodel.CMSPlugin` 의 하위클래스의 모델을 만들어야 한다.
@@ -198,9 +198,103 @@ class HelloPlugin(CMSPluginBase):
 {% endraw %}
 ```
 
-template 의 내용 중 바뀐 점은 하드 코딩된 `Guest` 부분을 `{{ instance.guest_name }}` 이라는 템플릿 변수로 바꾼 것 밖에 없다.
+template 의 내용 중 바뀐 점은 하드 코딩된 `Guest` 부분을 `{% raw %}{{ instance.guest_name }}{% endraw %}` 이라는 템플릿 변수로 바꾼 것 밖에 없다.
 
 ### 관계형 다루기
+직접 만든 사용자 플러그인이 사용 된 페이지가 배포될 때 마다 그 플러그인은 복사된다. 그래서 만약 사용자 플러그인이 외래키 또는 다대다 관계를 가지고 있다면 CMS 가 그 플러그인을 복사할 때마다 필요하다면 그 관계 객체들을 같이 복사할 필요가있다. **왜냐하면 자동으로 복사되지 않기 때문이다**
+
+모든 플러그인 모델은 상위 클래스로부터 비어있는 `cms.models.pluginmodel.CMSPlugin.copy_relations()` 메서드를 상속받는다. 그리고 이 메서드는 플러그인이 복사될 때마다 호출된다. 그래서 이 메서드 내부를 필요에 따라 바꿔서 사용해야한다.
+
+전형적으로는 관계된 객체들을 복사하기를 원할 것이다. 이를 위해서는 `copy_relations` 로 불리는 메서드를 직접 만든 플러그인 모델안에 만들어줘야 한다. 그리고 이것은 기존의 instance 를 인자로 받는다.
+
+그런데 만약 관계된 객체들을 복사받길 원할 수도 있다.(예를 들어 그들을 따로 내버려 두고 싶다면) 아니면 심지어 완전히 다른 관계를 선택하거나 복사되었을 때 새로운 관계를 만들기를 원할 수도 있다. 이들은 플러그인과 플러그인의 작동방식에 달려있다.
+
+#### 다른 객체로부터의 외래키 관계
+플러그인에 외래키를 가지고 있는 항목이 있을 수 있으며, 일반적으로는 관리자 페이지에서 인라인으로 설정하면 이 항목이 해당된다. 따라서 두가지 모델이 있을 수 있는데, 하나는 플러그인에 대한 모델이고 다른 하나는 해당 품목에 대한 모델이다.
+
+```python
+class ArticlePluginModel(CMSPlugin):
+    title = models.CharField(max_length=50)
+
+class AssociatedItem(models.Model):
+    plugin = models.ForeignKey(
+        ArticlePluginModel,
+        related_name="associated_item"
+    )
+```
+
+그런 다음 관련 항목을 루프를 통해 반복해서 복사하여 새 플러그인에 복사된 외래키를 부여하려면 플러그인 모델에서 `copy_relations()` 메서드가 필요하다.
+
+```python
+class ArticlePluginModel(CMSPlugin):
+    title = models.CharField(max_length=50)
+
+    def copy_relations(self, oldinstance):
+        # Before copying related objects from the old instance, the ones
+        # on the current one need to be deleted. Otherwise, duplicates may
+        # appear on the public version of the page
+        self.associated_item.all().delete()
+
+        for associated_item in oldinstance.associated_item.all():
+            # instance.pk = None; instance.pk.save() is the slightly odd but
+            # standard Django way of copying a saved model instance
+            associated_item.pk = None
+            associated_item.plugin = self
+            associated_item.save()
+```
+
+#### 다른 객체와의 다대다 관계 또는 외래키 관계
+다음과 같은 경우를 가정해보자:
+```python
+class ArticlePluginModel(CMSPlugin):
+    title = models.CharField(max_length=50)
+    sections = models.ManyToManyField(Section)
+```
+
+플러그인이 복사되었을 때, sections 필드를 유지시키고 싶다면:
+```python
+class ArticlePluginModel(CMSPlugin):
+    title = models.CharField(max_length=50)
+    sections = models.ManyToManyField(Section)
+
+    def copy_relations(self, oldinstance):
+        self.sections = oldinstance.sections.all()
+```
+`copy_relations()` 메서드를 다음처럼 추가해야 한다.
+
+만약 플러그인이 둘 이상의 관계형 필드를 가지고 있다면, 그에 맞게 각각의 필드에 대해 설정 해주면 된다.
+
+#### 플러그인들 사이의 관계
+플러그인들 끼리의 관계를 다루는 것은 훨씬 어렵다. 자세히 알아보려면 다음의 깃헙 이슈를 확인해보자.
+[copy_relations() does not work for relations between cmsplugins #4143](https://github.com/divio/django-cms/issues/4143)
+
+## 심화
+### Inline Admin (인라인 어드민)
+만약 외래키 관계를 인라인 어드민으로 관리하길 원한다면 `admin.StackedInline` 클래스를 만들어서 플러그인 안에 `inlines` 속성으로 넣을 수 있다. 그러면 인라인 어드민 폼을 외래키 참조를 위해 사용할 수 있다:
+
+```python
+class ItemInlineAdmin(admin.StackedInline):
+    model = AssociatedItem
+
+
+class ArticlePlugin(CMSPluginBase):
+    model = ArticlePluginModel
+    name = _("Article Plugin")
+    render_template = "article/index.html"
+    inlines = (ItemInlineAdmin,)
+
+    def render(self, context, instance, placeholder):
+        context = super(ArticlePlugin, self).render(context, instance, placeholder)
+        items = instance.associated_item.all()
+        context.update({
+            'items': items,
+        })
+        return context
+```
+
+### Plugin Form (플러그인 폼)
+
+
 
 
 
