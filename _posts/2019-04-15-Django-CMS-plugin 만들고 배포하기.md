@@ -132,7 +132,7 @@ or
 
 이러한 속성들과 더불어 `render()` 메서드 역시 override 할 수 있다. 이 메서드를 오버라이드 해서 플러그인을 렌더링하기 위해 사용되는 template context 변수들을 정해줄 수 있다. 기본적으로 이 메서드는 context 에 `instance` 와 `placeholder` 객체만 추가해주면 되지만, 플러그인이 필요한 context 를 포함하도록 오버라이드 할 수 있다.
 
-다른 많은 메서드들도 당신의 CMSPluginBase 하위클래스를 (플러그인 클래스) 오버라이딩 하기 위해 사용할 수 있다. 참조: `[CMSPluginBase - 자세히 보기](http://docs.django-cms.org/en/latest/reference/plugins.html#cms.plugin_base.CMSPluginBase)`
+다른 많은 메서드들도 당신의 CMSPluginBase 하위클래스를 (플러그인 클래스) 오버라이딩 하기 위해 사용할 수 있다. 참조: `[CMSPluginBase - 자세히 보기]`(http://docs.django-cms.org/en/latest/reference/plugins.html#cms.plugin_base.CMSPluginBase)
 
 
 
