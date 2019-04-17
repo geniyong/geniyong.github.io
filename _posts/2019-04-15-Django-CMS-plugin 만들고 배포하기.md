@@ -294,6 +294,7 @@ class ArticlePlugin(CMSPluginBase):
 
 ### Plugin Form (플러그인 폼)
 
+# Django 재사용 가능한 앱 만들기
 
 
 
