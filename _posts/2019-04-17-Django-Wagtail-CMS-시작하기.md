@@ -698,35 +698,43 @@ pip install wagtail
 
 ### 설정
 1. 기존 django 의 설정파일에서 `INSTALLED_APPS` 부분에 다음을 추가한다:
-``` python
-'wagtail.contrib.forms',
-'wagtail.contrib.redirects',
-'wagtail.embeds',
-'wagtail.sites',
-'wagtail.users',
-'wagtail.snippets',
-'wagtail.documents',
-'wagtail.images',
-'wagtail.search',
-'wagtail.admin',
-'wagtail.core',
 
-'modelcluster',
-'taggit',
+```python
+[
+    'wagtail.contrib.forms',
+    'wagtail.contrib.redirects',
+    'wagtail.embeds',
+    'wagtail.sites',
+    'wagtail.users',
+    'wagtail.snippets',
+    'wagtail.documents',
+    'wagtail.images',
+    'wagtail.search',
+    'wagtail.admin',
+    'wagtail.core',
+
+    'modelcluster',
+    'taggit',
+]
 ```
 
 2. `MIDDLEWARE` 부분에 다음을 추가한다:
-``` python
-'wagtail.core.middleware.SiteMiddleware',
-'wagtail.contrib.redirects.middleware.RedirectMiddleware',
+
+```python
+[
+    'wagtail.core.middleware.SiteMiddleware',
+    'wagtail.contrib.redirects.middleware.RedirectMiddleware',
+]
 ```
 
 3. `STATIC_ROOT` 세팅을 추가한다. (추가하지 않았을 경우에만)
+
 ``` python
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 ```
 
 4. `WAGTAIL_SITE_NAME` 을 추가한다. 이는 wagtail admin 백엔드의 메인 대시보드에서 보여진다.
+
 ```python
 WAGTAIL_SITE_NAME = 'My Example Site'
 ```
