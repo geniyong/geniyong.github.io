@@ -2,6 +2,7 @@
 tags: Django, Django-CMS
 title: Django-CMS-plugin 만들고 패키지 배포하기
 ---
+
 # 들어가기전
 Django CMS 라이브러리의 플러그인을 만들어보고 이를 패키징하여 배포해보자.       
 이를 위해서는 크게 두가지의 개념을 이해해야한다.    
