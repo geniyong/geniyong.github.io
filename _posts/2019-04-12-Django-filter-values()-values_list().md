@@ -1,5 +1,5 @@
 ---
-tags: Django, Django-RestFramework
+tags: Django Django-RestFramework
 title: Django values() vs values_list()
 ---
 ## Django 에서 values() 와 values_list() 의 차이점

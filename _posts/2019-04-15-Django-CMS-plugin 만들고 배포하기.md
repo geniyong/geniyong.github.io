@@ -1,5 +1,5 @@
 ---
-tags: Django, Django-CMS
+tags: Django Django-CMS
 title: Django-CMS-plugin 만들고 패키지 배포하기
 ---
 
